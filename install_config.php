@@ -230,7 +230,7 @@ $tidbit_relationships['Leads']=array(
 
 $tbaModuleAccess = 72; // This value related to ACL_ALLOW_SELECTED_TEAMS(Owner & Selected Teams) constant
 $tbaFieldAccess = 68; // This value related to ACL_SELECTED_TEAMS_READ_OWNER_WRITE((Owner & Selected Teams) Read/Owner Write) constant
-$tbaRestrictionLevelDefault = 'medium';
+$tbaRestrictionLevelDefault = 'full';
 $tbaRestrictionLevel = array(
     'minimum' => array(
         'modules' => array(
