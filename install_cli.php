@@ -140,12 +140,13 @@ Options
 
     --insert_batch_size Number of VALUES to be added to one INSERT statement for bean data.
                         Does Not include relations for now
-    
+
+    --not_add_user_to_all_teams Dont add users to all teams
+
     "Powered by SugarCRM"
     
 
 EOS;
-
 
 // TODO: changed command line arg handling to detect --allmodules & --allrelationships
 if(function_exists('getopt'))
@@ -242,7 +243,9 @@ else
             $nextData = 'iterator';
         } elseif ($arg === '--insert_batch_size') {
             $nextData = 'insert_batch_size';
-        }
+        } elseif ($arg == '--not_add_user_to_all_teams') {
+			$opts['not_add_user_to_all_teams'] = true;
+		}
 	}
 }
 
@@ -302,6 +305,10 @@ if (file_exists(dirname(__FILE__) . '/../ini_setup.php')) {
 	TEMPLATE_PATH . PATH_SEPARATOR .
 	get_include_path()
 	);
+}
+
+if (!isset($opts['not_add_user_to_all_teams'])) {
+	$opts['not_add_user_to_all_teams'] = false;
 }
 require_once('include/utils.php');
 require_once('config.php');
@@ -647,7 +654,9 @@ foreach($module_keys as $module)
             $curdt = $datetime = date('Y-m-d H:i:s') ;
             $stmt = "INSERT INTO user_preferences(id,category,date_entered,date_modified,assigned_user_id,contents) values ('" . $hashed_id . "', 'global', '" . $curdt . "', '" . $curdt . "', '" . $row['id'] . "', '" . $content . "')";
             loggedQuery($stmt);
-			add_user_to_all_teams($row['id']);
+			if (!$opts['not_add_user_to_all_teams']) {
+				add_user_to_all_teams($row['id']);
+			}
         }
     }
 
